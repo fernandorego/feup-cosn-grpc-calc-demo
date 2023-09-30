@@ -3,9 +3,11 @@ import 'package:flutter/cupertino.dart';
 import '../model/operation.dart';
 
 class Visor extends StatelessWidget {
-  const Visor(this.operands, this.operation, {Key? key}) : super(key: key);
+  Visor(List<num> numOperands, this.operation, {Key? key})
+      : operands = numOperands.map((e) => e.toInt()).toList(),
+        super(key: key);
 
-  final List<num> operands;
+  final List<int> operands;
   final Operation? operation;
 
   @override

@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:calc_app/model/operation.dart';
+import 'package:calc_app/service/rpc.dart';
 import 'package:calc_app/view/visor.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -72,14 +73,25 @@ class CalculatorState extends State<Calculator> {
     });
   }
 
-  void onEquals() {
-    setState(() {
-      if (operands.length == 2) {
-        operands[0] = operation!.applyLocally(operands[0], operands[1]);
-        operands.removeAt(1);
-        operation = null;
-      }
-    });
+  void onEquals() async {
+    if (operation == null) {
+      return;
+    }
+
+    final result = switch (operation!) {
+      Operation.add => CalculatorService().sum(operands[0], operands[1]),
+      Operation.subtract => CalculatorService().sub(operands[0], operands[1]),
+      Operation.multiply => CalculatorService().mul(operands[0], operands[1]),
+      Operation.divide => CalculatorService().div(operands[0], operands[1])
+    };
+
+    result.then((value) => {
+          setState(() {
+            operands[0] = value;
+            operands.removeAt(1);
+            operation = null;
+          })
+        });
   }
 
   void onDeleteDigit(int operandIndex) {
