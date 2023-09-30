@@ -7,27 +7,27 @@ require 'calculator_services_pb'
 
 class CalculatorServer < Calculator::Calculator::Service
   # sum implements the Sum rpc method.
-  def sum(calculator_req, _unused_call)
-    Calculator::CalcReply.new(res: calculator_req.x + calculator_req.y)
+  def sum(calc_req, _unused_call)
+    Calculator::CalcReply.new(res: calc_req.x + calc_req.y)
   end
 
-  # sum implements the Sub rpc method.
-  def sub(calculator_req, _unused_call)
-    Calculator::CalcReply.new(res: calculator_req.x - calculator_req.y)
+  # sub implements the Sub rpc method.
+  def sub(calc_req, _unused_call)
+    Calculator::CalcReply.new(res: calc_req.x - calc_req.y)
   end
 
-  # sum implements the Mul rpc method.
-  def mul(calculator_req, _unused_call)
-    Calculator::CalcReply.new(res: calculator_req.x * calculator_req.y)
+  # mul implements the Mul rpc method.
+  def mul(calc_req, _unused_call)
+    Calculator::CalcReply.new(res: calc_req.x * calc_req.y)
   end
 
-  # sum implements the Div rpc method.
-  def div(calculator_req, _unused_call)
-    Calculator::CalcReply.new(res: calculator_req.x / calculator_req.y)
+  # div implements the Div rpc method.
+  def div(calc_req, _unused_call)
+    Calculator::CalcReply.new(res: calc_req.x / calc_req.y)
   end
 end
 
-# main starts an RpcServer that receives requests to GreeterServer at the sample server port.
+# main starts an RpcServer that receives requests to CalculatorServer at the sample server port.
 def main
   s = GRPC::RpcServer.new
   s.add_http2_port('0.0.0.0:50051', :this_port_is_insecure)
