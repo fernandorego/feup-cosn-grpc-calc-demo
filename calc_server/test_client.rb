@@ -6,14 +6,13 @@ require 'grpc'
 require 'calculator_services_pb'
 
 def main
-  user = ARGV.size > 0 ?  ARGV[0] : 'world'
-  hostname = ARGV.size > 1 ?  ARGV[1] : 'localhost:50051'
+  hostname = ARGV.size > 0 ?  ARGV[0] : 'localhost:50051'
   stub = Calculator::Calculator::Stub.new(hostname, :this_channel_is_insecure)
 
   # sum
   begin
     res = stub.sum(Calculator::CalcRequest.new(x: 4, y: 2)).res
-    p "Sum: #{res}"
+    p "Sum: 4 + 2 = #{res}"
   rescue GRPC::BadStatus => e
     abort "ERROR: #{e.res}"
   end
@@ -21,7 +20,7 @@ def main
   # sub
   begin
     res = stub.sub(Calculator::CalcRequest.new(x: 4, y: 2)).res
-    p "Sum: #{res}"
+    p "Sub: 4 - 2 = #{res}"
   rescue GRPC::BadStatus => e
     abort "ERROR: #{e.res}"
   end
@@ -29,7 +28,7 @@ def main
   # mul
   begin
     res = stub.mul(Calculator::CalcRequest.new(x: 4, y: 2)).res
-    p "Sum: #{res}"
+    p "Mul: 4 * 2 = #{res}"
   rescue GRPC::BadStatus => e
     abort "ERROR: #{e.res}"
   end
@@ -37,7 +36,7 @@ def main
   # div
   begin
     res = stub.div(Calculator::CalcRequest.new(x: 4, y: 2)).res
-    p "Sum: #{res}"
+    p "Div: 4 / 2 = #{res}"
   rescue GRPC::BadStatus => e
     abort "ERROR: #{e.res}"
   end
