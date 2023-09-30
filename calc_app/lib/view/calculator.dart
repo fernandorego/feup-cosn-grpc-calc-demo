@@ -36,12 +36,20 @@ class CalculatorState extends State<Calculator> {
   void onNumber(int number) {
     setState(() {
       if (operands.length == 2) {
-        operands[1] = operands[1] * 10 + number;
+        if (operands[1] >= 0) {
+          operands[1] = operands[1] * 10 + number;
+          return;
+        }
+        operands[1] = operands[1] * 10 - number;
         return;
       }
 
       if (operands.length == 1 && operation == null) {
-        operands[0] = operands[0] * 10 + number;
+        if (operands[0] >= 0) {
+          operands[0] = operands[0] * 10 + number;
+          return;
+        }
+        operands[0] = operands[0] * 10 - number;
         return;
       }
 
@@ -74,7 +82,7 @@ class CalculatorState extends State<Calculator> {
   }
 
   void onEquals() async {
-    if (operation == null) {
+    if (operands.length != 2 || operation == null) {
       return;
     }
 
@@ -85,17 +93,20 @@ class CalculatorState extends State<Calculator> {
       Operation.divide => CalculatorService().div(operands[0], operands[1])
     };
 
-    result.then((value) => {
-          setState(() {
-            operands[0] = value;
-            operands.removeAt(1);
-            operation = null;
-          })
-        });
+    result.then((value) {
+      if (value.isNaN || value.isInfinite) {
+        return;
+      }
+      setState(() {
+        operands[0] = value;
+        operands.removeAt(1);
+        operation = null;
+      });
+    });
   }
 
   void onDeleteDigit(int operandIndex) {
-    if (operands[operandIndex] < 10) {
+    if (operands[operandIndex].abs() < 10) {
       if (operandIndex == 0) {
         operands[0] = 0;
         return;
@@ -104,6 +115,11 @@ class CalculatorState extends State<Calculator> {
       return;
     }
 
-    operands[operandIndex] = (operands[operandIndex] / 10).floor();
+    if (operands[operandIndex] >= 0) {
+      operands[operandIndex] = (operands[operandIndex] / 10).floor();
+      return;
+    }
+
+    operands[operandIndex] = (operands[operandIndex] / 10).ceil();
   }
 }
