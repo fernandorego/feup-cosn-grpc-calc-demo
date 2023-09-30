@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package calculator;
+
+service Calculator {
+  rpc Sum (CalcRequest) returns (CalcReply);
+
+  rpc Sub (CalcRequest) returns (CalcReply);
+
+  rpc Mul (CalcRequest) returns (CalcReply);
+
+  rpc Div (CalcRequest) returns (CalcReply);
+}
+
+message CalcRequest {
+  double x = 1;
+  double y = 2;
+}
+
+message CalcReply {
+  double res = 1;
+}
